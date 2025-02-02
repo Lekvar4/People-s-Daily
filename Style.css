@@ -48,22 +48,21 @@ header .logo img {
   }
   
   /* Hero Section */
-.hero {
-  text-align: center;
-  padding: 50px 0;
-  background-color: #000000; /* Black background */
-}
-
-.hero h1 {
-  font-size: 2.5em;
-  margin-bottom: 20px;
-  color: #ffffff; /* White text for better contrast */
-}
-
-.hero p {
-  font-size: 1.2em;
-  color: #ffffff; /* White text for better contrast */
-}
+  .hero {
+    background-color: #000000;
+    padding: 50px 0;
+    text-align: center;
+  }
+  
+  .hero h1 {
+    font-size: 2.5rem;
+    margin: 0;
+  }
+  
+  .hero p {
+    font-size: 1.2rem;
+  }
+  
   /* Blog Posts */
   .category {
     margin-top: 40px;
@@ -197,7 +196,7 @@ header .logo img {
     margin: 0 0 20px;
   }
   
-  .featured-content .learn-more {
+  .featured-content .read-more {
     display: inline-block;
     padding: 10px 20px;
     background-color: #4CAF50;
@@ -327,46 +326,4 @@ header .logo img {
 
   }
 
-}
-@media (max-width: 768px) {
-  .menu-icon {
-    display: block; /* Show menu icon on small screens */
-  }
-
-  .nav-links {
-    display: none; /* Hide nav links by default on small screens */
-    flex-direction: column;
-    gap: 10px;
-    background-color: #000000;
-    padding: 10px;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 100%;
-  }
-
-  .nav-links.active {
-    display: flex; /* Show nav links when menu is toggled */
-  }
-}
-
-@media (max-width: 768px) {
-  .menu-icon {
-    display: block; /* Show menu icon on small screens */
-  }
-
-  .nav-links {
-    display: none; /* Hide menu by default */
-    flex-direction: column;
-    background-color: #000000;
-    padding: 10px;
-    position: absolute;
-    top: 60px;
-    left: 0;
-    width: 100%;
-  }
-
-  .nav-links.active {
-    display: flex; /* Show menu when toggled */
-  }
 }
