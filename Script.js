@@ -38,9 +38,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (menuIcon && navLinks) {
         menuIcon.addEventListener("click", function () {
-            navLinks.classList.toggle("show"); // Make sure "show" is used in CSS
+            navLinks.classList.toggle("active"); // Ensure it matches CSS
         });
     }
+});
 
     const newsForm = document.getElementById("news-form");
     if (newsForm) {
