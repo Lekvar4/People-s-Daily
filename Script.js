@@ -32,24 +32,32 @@ document.getElementById('menu-icon').addEventListener('click', () => {
     document.getElementById('news-form').reset();
   });
   
-document.addEventListener("DOMContentLoaded", function () {
-    const menuIcon = document.getElementById("menu-icon");
-    const navLinks = document.getElementById("nav-links");
+document.addEventListener('DOMContentLoaded', () => {
 
-    if (menuIcon && navLinks) {
-        menuIcon.addEventListener("click", function () {
-            navLinks.classList.toggle("active"); // Ensure it matches CSS
-        });
-    }
-});
-
-    const newsForm = document.getElementById("news-form");
-    if (newsForm) {
-        newsForm.addEventListener("submit", function (e) {
-            e.preventDefault();
-            const writer = document.getElementById("news-writer").value;
-            alert(`Thank you, ${writer}! Your news has been submitted.`);
-            newsForm.reset();
-        });
-    }
-});
+    const menuIcon = document.getElementById('menu-icon');
+  
+    const navLinks = document.getElementById('nav-links');
+  
+  
+  
+    menuIcon.addEventListener('click', () => {
+  
+      navLinks.classList.toggle('active');
+  
+    });
+  
+  
+  
+    const newsForm = document.getElementById('news-form');
+  
+    newsForm.addEventListener('submit', (e) => {
+  
+      e.preventDefault();
+  
+      alert('News submitted successfully!');
+  
+      newsForm.reset();
+  
+    });
+  
+  });
