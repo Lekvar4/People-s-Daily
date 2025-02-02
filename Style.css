@@ -276,9 +276,6 @@ header .logo img {
   color: #666;
 
 }
-/* Add your existing CSS here */
-
-
 
 /* Responsive styles for the hero section */
 
@@ -333,19 +330,18 @@ header .logo img {
   }
 
   .nav-links {
-    display: none; /* Hide nav links by default on small screens */
+    display: none; /* Hide menu by default */
     flex-direction: column;
-    gap: 10px;
     background-color: #000000;
     padding: 10px;
     position: absolute;
-    top: 100%;
+    top: 60px;
     left: 0;
     width: 100%;
   }
 
   .nav-links.active {
-    display: flex; /* Show nav links when menu is toggled */
+    display: flex; /* Show menu when toggled */
   }
 }
 
