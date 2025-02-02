@@ -7,7 +7,6 @@ document.addEventListener('DOMContentLoaded', () => {
     navLinks.classList.toggle('active');
   });
 
-  // Submit News Form
   const newsForm = document.getElementById('news-form');
   newsForm.addEventListener('submit', (e) => {
     e.preventDefault();
