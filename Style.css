@@ -348,3 +348,24 @@ header .logo img {
     display: flex; /* Show nav links when menu is toggled */
   }
 }
+
+@media (max-width: 768px) {
+  .menu-icon {
+    display: block; /* Show menu icon on small screens */
+  }
+
+  .nav-links {
+    display: none; /* Hide menu by default */
+    flex-direction: column;
+    background-color: #000000;
+    padding: 10px;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    width: 100%;
+  }
+
+  .nav-links.active {
+    display: flex; /* Show menu when toggled */
+  }
+}
