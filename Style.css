@@ -1,11 +1,21 @@
+:root {
+  --primary-color: #4CAF50;
+  --secondary-color: #000000;
+  --text-color: #ffffff;
+  --background-color: #4CAF50;
+  --button-background: #000000;
+  --button-text: #ffffff;
+  --border-radius: 8px;
+}
+
 /* General Styles */
 body {
   font-family: Arial, sans-serif;
   line-height: 1.6;
   margin: 0;
   padding: 0;
-  background-color: #4CAF50; /* Green background */
-  color: #ffffff; /* White text */
+  background-color: var(--background-color);
+  color: var(--text-color);
 }
 
 .container {
@@ -16,7 +26,7 @@ body {
 
 /* Header */
 header {
-  background-color: #000000; /* Black header */
+  background-color: var(--secondary-color);
   padding: 107px 0;
 }
 
@@ -37,26 +47,30 @@ nav {
 }
 
 .nav-links a {
-  color: #ffffff;
+  color: var(--text-color);
   text-decoration: none;
+}
+
+.nav-links a:hover {
+  color: var(--primary-color);
 }
 
 /* Hero Section */
 .hero {
   text-align: center;
   padding: 50px 0;
-  background-color: #000000; /* Black background */
+  background-color: var(--secondary-color);
 }
 
 .hero h1 {
   font-size: 2.5em;
   margin-bottom: 20px;
-  color: #ffffff; /* White text */
+  color: var(--text-color);
 }
 
 .hero p {
   font-size: 1.2em;
-  color: #ffffff; /* White text */
+  color: var(--text-color);
 }
 
 /* Blog Posts */
@@ -76,11 +90,11 @@ nav {
 }
 
 .post {
-  background-color: #ffffff;
-  border-radius: 8px;
+  background-color: var(--text-color);
+  border-radius: var(--border-radius);
   overflow: hidden;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  color: #000000;
+  color: var(--secondary-color);
 }
 
 .post img {
@@ -130,17 +144,21 @@ nav {
 
 #news-form button {
   padding: 10px;
-  background-color: #000000;
-  color: #ffffff;
+  background-color: var(--button-background);
+  color: var(--button-text);
   border: none;
   border-radius: 25px; /* Rounded corners */
   cursor: pointer;
 }
 
+#news-form button:hover {
+  background-color: var(--primary-color);
+}
+
 /* Footer */
 footer {
-  background-color: #000000;
-  color: #ffffff;
+  background-color: var(--secondary-color);
+  color: var(--text-color);
   text-align: center;
   padding: 20px 0;
   margin-top: 40px;
@@ -148,13 +166,13 @@ footer {
 
 /* Featured News Section */
 .featured-news {
-  background-color: #000000;
+  background-color: var(--secondary-color);
   padding: 40px 0;
 }
 
 .featured-news h2 {
   font-size: 2rem;
-  color: #ffffff;
+  color: var(--text-color);
   text-align: center;
   margin-bottom: 20px;
 }
@@ -164,8 +182,8 @@ footer {
   flex-direction: column;
   align-items: center;
   gap: 20px;
-  background-color: #ffffff;
-  border-radius: 8px;
+  background-color: var(--text-color);
+  border-radius: var(--border-radius);
   overflow: hidden;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -178,7 +196,7 @@ footer {
 
 .featured-content {
   padding: 20px;
-  color: #000000;
+  color: var(--secondary-color);
   text-align: center;
 }
 
@@ -195,10 +213,14 @@ footer {
 .featured-content .learn-more {
   display: inline-block;
   padding: 10px 20px;
-  background-color: #4CAF50;
-  color: #ffffff;
+  background-color: var(--primary-color);
+  color: var(--text-color);
   text-decoration: none;
   border-radius: 25px;
+}
+
+.featured-content .learn-more:hover {
+  background-color: var(--secondary-color);
 }
 
 @media (min-width: 768px) {
@@ -225,20 +247,20 @@ footer {
 }
 
 .social-media a {
-  color: #ffffff;
+  color: var(--text-color);
   font-size: 1.5rem;
   text-decoration: none;
 }
 
 .social-media a:hover {
-  color: #4CAF50;
+  color: var(--primary-color);
 }
 
 /* Responsive Styles */
 @media (max-width: 768px) {
   .nav-links {
     flex-direction: column;
-    background-color: #000000;
+    background-color: var(--secondary-color);
     padding: 20px;
     position: absolute;
     top: 180px; /* Adjust top position to avoid covering the logo */
