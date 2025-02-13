@@ -96,15 +96,25 @@
           <span>By Admin</span>
           <span>February 2, 2025</span>
         </div>
+        <div class="post-actions">
+          <button class="like-btn"><i class="fas fa-thumbs-up"></i> (<span class="like-count">0</span>)</button>
+          <button class="dislike-btn"><i class="fas fa-thumbs-down"></i> (<span class="dislike-count">0</span>)</button>
+          <button class="share-btn" data-link="https://example.com/post1" data-category="Entertainment Industry"><i class="fas fa-share"></i></button>
+        </div>
       </article>
 
       <article class="post">
-        <img src="https://hips.hearstapps.com/hmg-prod/images/taylor-swift-performs-onstage-during-taylor-swift-the-news-photo-1733447389.jpg?crop=0.65234xw:1xh;center,top&resize=640:*">
+        <img src="https://hips.hearstapps.com/hmg-prod/images/taylor-swift-performs-onstage-during-taylor-swift-the-news-photo-1733447389.jpg?crop=0.65234xw:1xh;center,top&resize=640:*" alt="Music Post 2">
         <h3>Taylor Swift’s Eras Tour: A Phenomenal Journey</h3>
         <p>Taylor Swift’s Eras Tour has been one of the most talked-about events in the music industry. With every performance, she takes fans through the different phases of her career, blending nostalgia with new music. Join us as we explore the highlights of her tour, the fan experience, and why this tour is redefining live music events. From surprise guest performances to unforgettable stage moments, the Eras Tour is making history.</p>
         <div class="meta">
           <span>By Admin</span>
           <span>February 1, 2025</span>
+        </div>
+        <div class="post-actions">
+          <button class="like-btn"><i class="fas fa-thumbs-up"></i> (<span class="like-count">0</span>)</button>
+          <button class="dislike-btn"><i class="fas fa-thumbs-down"></i> (<span class="dislike-count">0</span>)</button>
+          <button class="share-btn" data-link="https://example.com/post2" data-category="Entertainment Industry"><i class="fas fa-share"></i></button>
         </div>
       </article>
     </div>
@@ -121,6 +131,11 @@
           <span>By Admin</span>
           <span>February 1, 2025</span>
         </div>
+        <div class="post-actions">
+          <button class="like-btn"><i class="fas fa-thumbs-up"></i> (<span class="like-count">0</span>)</button>
+          <button class="dislike-btn"><i class="fas fa-thumbs-down"></i> (<span class="dislike-count">0</span>)</button>
+          <button class="share-btn" data-link="https://example.com/post3" data-category="Technology Blog"><i class="fas fa-share"></i></button>
+        </div>
       </article>
 
       <article class="post">
@@ -130,6 +145,11 @@
         <div class="meta">
           <span>By Admin</span>
           <span>February 1, 2025</span>
+        </div>
+        <div class="post-actions">
+          <button class="like-btn"><i class="fas fa-thumbs-up"></i> (<span class="like-count">0</span>)</button>
+          <button class="dislike-btn"><i class="fas fa-thumbs-down"></i> (<span class="dislike-count">0</span>)</button>
+          <button class="share-btn" data-link="https://example.com/post4" data-category="Technology Blog"><i class="fas fa-share"></i></button>
         </div>
       </article>
     </div>
@@ -146,6 +166,11 @@
           <span>By Admin</span>
           <span>January 31, 2025</span>
         </div>
+        <div class="post-actions">
+          <button class="like-btn"><i class="fas fa-thumbs-up"></i> (<span class="like-count">0</span>)</button>
+          <button class="dislike-btn"><i class="fas fa-thumbs-down"></i> (<span class="dislike-count">0</span>)</button>
+          <button class="share-btn" data-link="https://example.com/post5" data-category="Hot News Today"><i class="fas fa-share"></i></button>
+        </div>
       </article>
 
       <article class="post">
@@ -155,6 +180,11 @@
         <div class="meta">
           <span>By Admin</span>
           <span>January 30, 2025</span>
+        </div>
+        <div class="post-actions">
+          <button class="like-btn"><i class="fas fa-thumbs-up"></i> (<span class="like-count">0</span>)</button>
+          <button class="dislike-btn"><i class="fas fa-thumbs-down"></i> (<span class="dislike-count">0</span>)</button>
+          <button class="share-btn" data-link="https://example.com/post6" data-category="Hot News Today"><i class="fas fa-share"></i></button>
         </div>
       </article>
     </div>
@@ -171,6 +201,11 @@
           <span>By Admin</span>
           <span>January 30, 2025</span>
         </div>
+        <div class="post-actions">
+          <button class="like-btn"><i class="fas fa-thumbs-up"></i> (<span class="like-count">0</span>)</button>
+          <button class="dislike-btn"><i class="fas fa-thumbs-down"></i> (<span class="dislike-count">0</span>)</button>
+          <button class="share-btn" data-link="https://example.com/post7" data-category="World Economy Today"><i class="fas fa-share"></i></button>
+        </div>
       </article>
 
       <article class="post">
@@ -180,6 +215,11 @@
         <div class="meta">
           <span>By Admin</span>
           <span>January 29, 2025</span>
+        </div>
+        <div class="post-actions">
+          <button class="like-btn"><i class="fas fa-thumbs-up"></i> (<span class="like-count">0</span>)</button>
+          <button class="dislike-btn"><i class="fas fa-thumbs-down"></i> (<span class="dislike-count">0</span>)</button>
+          <button class="share-btn" data-link="https://example.com/post8" data-category="World Economy Today"><i class="fas fa-share"></i></button>
         </div>
       </article>
     </div>
@@ -226,7 +266,58 @@
         console.error('Error:', error);
       });
       });
-    </script>
+
+      document.querySelectorAll('.like-btn').forEach(button => {
+        button.addEventListener('click', function() {
+          const likeCount = this.querySelector('.like-count');
+          const dislikeButton = this.nextElementSibling;
+          const dislikeCount = dislikeButton.querySelector('.dislike-count');
+          if (this.classList.contains('liked')) {
+        likeCount.textContent = parseInt(likeCount.textContent) - 1;
+        this.classList.remove('liked');
+          } else {
+        likeCount.textContent = parseInt(likeCount.textContent) + 1;
+        this.classList.add('liked');
+        if (dislikeButton.classList.contains('disliked')) {
+          dislikeCount.textContent = parseInt(dislikeCount.textContent) - 1;
+          dislikeButton.classList.remove('disliked');
+        }
+          }
+        });
+      });
+
+      document.querySelectorAll('.dislike-btn').forEach(button => {
+        button.addEventListener('click', function() {
+          const dislikeCount = this.querySelector('.dislike-count');
+          const likeButton = this.previousElementSibling;
+          const likeCount = likeButton.querySelector('.like-count');
+          if (this.classList.contains('disliked')) {
+        dislikeCount.textContent = parseInt(dislikeCount.textContent) - 1;
+        this.classList.remove('disliked');
+          } else {
+        dislikeCount.textContent = parseInt(dislikeCount.textContent) + 1;
+        this.classList.add('disliked');
+        if (likeButton.classList.contains('liked')) {
+          likeCount.textContent = parseInt(likeCount.textContent) - 1;
+          likeButton.classList.remove('liked');
+        }
+          }
+        });
+      });
+
+      document.querySelectorAll('.share-btn').forEach(button => {
+        button.addEventListener('click', function() {
+          const link = this.getAttribute('data-link');
+          const category = this.getAttribute('data-category');
+          const shareText = `Check out this post from the ${category} category: ${link}`;
+          navigator.clipboard.writeText(shareText).then(() => {
+        alert('Link and category copied to clipboard!');
+          }).catch(err => {
+        console.error('Failed to copy link: ', err);
+          });
+        });
+      });
+        </script>
 
   </main>
 
