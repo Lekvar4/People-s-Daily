@@ -285,3 +285,43 @@ footer {
     font-size: 1em;
   }
 }
+
+/* Login and Admin Containers */
+.login-container, .admin-container {
+  max-width: 400px;
+  margin: 50px auto;
+  padding: 20px;
+  background-color: var(--text-color);
+  border-radius: var(--border-radius);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.login-container h2, .admin-container h2 {
+  text-align: center;
+  color: var(--secondary-color);
+}
+
+.login-container form, .admin-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.login-container input, .admin-container input, .admin-container textarea {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.login-container button, .admin-container button {
+  padding: 10px;
+  background-color: var(--button-background);
+  color: var(--button-text);
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+}
+
+.login-container button:hover, .admin-container button:hover {
+  background-color: var(--primary-color);
+}
