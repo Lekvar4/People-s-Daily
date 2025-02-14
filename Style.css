@@ -266,6 +266,15 @@ footer {
     top: 180px; /* Adjust top position to avoid covering the logo */
     left: 0;
     width: 50%;
+    display: none;
+  }
+
+  .menu-icon {
+    display: block;
+  }
+
+  .nav-links.active {
+    display: block;
   }
 
   .hero h1 {
