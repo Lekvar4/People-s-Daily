@@ -10,8 +10,18 @@
   <title>People’s Daily</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link rel="stylesheet" href="Style.css">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-XXXXX-Y"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-XXXXX-Y');
+  </script>
 </head>
 <body>
+  <noscript>
+    <p>JavaScript is disabled in your browser. Some features of this site may not work as intended.</p>
+  </noscript>
   <!-- Header -->
   <header>
     <div class="container">
@@ -39,7 +49,7 @@
       <h2>Featured News</h2>
       
       <div class="featured-post">
-        <img src="https://i.scdn.co/image/ab67616100005174a5eb0ea59755cf244a23ac2c" alt="Featured News">
+        <img src="https://i.scdn.co/image/ab67616100005174a5eb0ea59755cf244a23ac2c" alt="Lekvar on Spotify">
         <div class="featured-content">
           <h3>Lekvar on Spotify</h3>
           <p>Lekvar is an up-and-coming artist known for blending innovation with music. Stay ahead of the trends and experience his unique sound. Listen to Lekvar now on Spotify and be part of the future of music!</p>
@@ -50,7 +60,7 @@
       <p></p>
       
       <div class="featured-post">
-        <img src="https://d28wu8o6itv89t.cloudfront.net/images/Economyjpg-1595837145630.jpeg" alt="Featured News 2">
+        <img src="https://d28wu8o6itv89t.cloudfront.net/images/Economyjpg-1595837145630.jpeg" alt="Economic Forum 2025">
         <div class="featured-content">
           <h3>Economic Forum 2025</h3>
           <p>Insights and discussions on the global economy.</p>
@@ -61,7 +71,7 @@
       <p></p>
       
       <div class="featured-post">
-        <img src="https://www.nationalworld.com/jpim-static/image/2024/12/17/8/10/2025-music-award-ceremony-dates-hero.png?crop=3:2,smart&trim=&width=1200&auto=webp&quality=75" alt="Featured News 3">
+        <img src="https://www.nationalworld.com/jpim-static/image/2024/12/17/8/10/2025-music-award-ceremony-dates-hero.png?crop=3:2,smart&trim=&width=1200&auto=webp&quality=75" alt="Music Awards 2025">
         <div class="featured-content">
           <h3>Music Awards 2025</h3>
           <p>Celebrating the best in music this year.</p>
@@ -238,6 +248,12 @@
       <div id="success-message" style="display:none;">
       <p>Thank you! Your news has been submitted successfully.</p>
       </div>
+      <div id="loading-spinner" style="display:none;">
+        <p>Submitting...</p>
+      </div>
+      <div id="error-message" style="display:none;">
+        <p>Sorry, there was an error submitting your news. Please try again later.</p>
+      </div>
     </section>
 
     <script>
@@ -245,6 +261,8 @@
       event.preventDefault(); // Prevent form from submitting normally
 
       var formData = new FormData(this); // Create FormData object
+
+      document.getElementById('loading-spinner').style.display = 'block'; // Show loading spinner
 
       fetch('https://formspree.io/f/xjkkprdq', {
         method: 'POST',
@@ -254,6 +272,7 @@
         }
       })
       .then(response => {
+        document.getElementById('loading-spinner').style.display = 'none'; // Hide loading spinner
         if (response.ok) {
         // Show success message
         document.getElementById('success-message').style.display = 'block';
@@ -263,6 +282,8 @@
         }
       })
       .catch(error => {
+        document.getElementById('loading-spinner').style.display = 'none'; // Hide loading spinner
+        document.getElementById('error-message').style.display = 'block'; // Show error message
         console.error('Error:', error);
       });
       });
