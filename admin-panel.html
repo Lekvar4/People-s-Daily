@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel</title>
+  <link rel="stylesheet" href="Style.css">
+</head>
+<body>
+  <div class="admin-container">
+    <h2>Admin Panel</h2>
+    <form id="post-form">
+      <input type="text" id="post-title" placeholder="Post Title" required>
+      <input type="text" id="post-category" placeholder="Category" required>
+      <input type="date" id="post-date" required>
+      <input type="text" id="post-image" placeholder="Image URL" required>
+      <textarea id="post-content" placeholder="Post Content" required></textarea>
+      <button type="submit">Add Post</button>
+    </form>
+    <div id="post-success" style="display:none; color: green;">Post added successfully</div>
+  </div>
+
+  <div class="admin-container">
+    <h2>Manage Posts</h2>
+    <div id="posts-container">
+      <!-- Posts will be dynamically added here -->
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('post-form').addEventListener('submit', function(event) {
+      event.preventDefault();
+      const title = document.getElementById('post-title').value;
+      const category = document.getElementById('post-category').value;
+      const date = document.getElementById('post-date').value;
+      const image = document.getElementById('post-image').value;
+      const content = document.getElementById('post-content').value;
+
+      const post = {
+        id: Date.now(), // Unique ID for each post
+        title: title,
+        category: category,
+        date: date,
+        image: image,
+        content: content
+      };
+
+      let posts = JSON.parse(localStorage.getItem('posts')) || [];
+      posts.unshift(post); // Add new post at the top
+      localStorage.setItem('posts', JSON.stringify(posts));
+
+      document.getElementById('post-success').style.display = 'block';
+      document.getElementById('post-form').reset();
+      displayPosts(); // Refresh the posts list
+    });
+
+    function displayPosts() {
+      const postsContainer = document.getElementById('posts-container');
+      postsContainer.innerHTML = ''; // Clear existing posts
+      const posts = JSON.parse(localStorage.getItem('posts')) || [];
+
+      posts.forEach(post => {
+        const postElement = document.createElement('div');
+        postElement.classList.add('post');
+        postElement.innerHTML = `
+          <h3>${post.title}</h3>
+          <p>${post.content}</p>
+          <div class="meta">
+            <span>${new Date(post.date).toLocaleDateString()}</span>
+          </div>
+          <button onclick="deletePost(${post.id})">Delete</button>
+        `;
+        postsContainer.appendChild(postElement);
+      });
+    }
+
+    function deletePost(id) {
+      let posts = JSON.parse(localStorage.getItem('posts')) || [];
+      posts = posts.filter(post => post.id !== id);
+      localStorage.setItem('posts', JSON.stringify(posts));
+      displayPosts(); // Refresh the posts list
+    }
+
+    // Display posts on page load
+    document.addEventListener('DOMContentLoaded', displayPosts);
+  </script>
+</body>
+</html>
