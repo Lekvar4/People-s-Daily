@@ -38,6 +38,7 @@
           <li><a href="#hot-news">Hot News Today</a></li>
           <li><a href="#economy">World Economy Today</a></li>
           <li><a href="#submit-news">Submit News</a></li>
+          <li><a href="admin.html">Admin Panel</a></li> <!-- Admin Panel Link -->
         </ul>
       </nav>
     </div>
@@ -94,6 +95,13 @@
 
   <!-- Blog Posts -->
 <main class="container">
+  <section id="posts" class="category">
+    <h2>Latest Posts</h2>
+    <div class="posts" id="posts-container">
+      <!-- Posts will be dynamically added here -->
+    </div>
+  </section>
+  
   <section id="entertainment" class="category">
     <h2>Entertainment Industry</h2>
     <div class="posts">
@@ -234,6 +242,49 @@
     </div>
   </section>
 </main>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const postsContainer = document.getElementById('posts-container');
+    const posts = JSON.parse(localStorage.getItem('posts')) || [];
+
+    const categories = {};
+
+    posts.forEach(post => {
+      if (!categories[post.category]) {
+        categories[post.category] = [];
+      }
+      categories[post.category].push(post);
+    });
+
+    for (const category in categories) {
+      const categoryElement = document.createElement('section');
+      categoryElement.classList.add('category');
+      categoryElement.innerHTML = `<h2>${category}</h2>`;
+
+      const postsElement = document.createElement('div');
+      postsElement.classList.add('posts');
+
+      categories[category].forEach(post => {
+        const postElement = document.createElement('article');
+        postElement.classList.add('post');
+        postElement.innerHTML = `
+          <img src="${post.image}" alt="${post.title}">
+          <h3>${post.title}</h3>
+          <p>${post.content}</p>
+          <div class="meta">
+            <span>By Admin</span>
+            <span>${new Date(post.date).toLocaleDateString()}</span>
+          </div>
+        `;
+        postsElement.appendChild(postElement);
+      });
+
+      categoryElement.appendChild(postsElement);
+      postsContainer.appendChild(categoryElement);
+    }
+  });
+</script>
 
     <!-- Submit News Section -->
     <section id="submit-news" class="submit-news">
