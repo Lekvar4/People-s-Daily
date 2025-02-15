@@ -6,8 +6,96 @@
   <title>Admin Panel</title>
   <link rel="stylesheet" href="Style.css">
   <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+  <script type="module">
+    // Import Firebase modules properly
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+    import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, orderBy, query } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+
+    // Your Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyAf8TQrUMp2tdXmWNxilMZJ1Qr2Cnjqqv0",
+      authDomain: "apartment-437a8.firebaseapp.com",
+      projectId: "apartment-437a8",
+      storageBucket: "apartment-437a8.appspot.com",
+      messagingSenderId: "827390303294",
+      appId: "1:827390303294:web:4545c07442c9f2b994c56f",
+      measurementId: "G-95Y50JCVF8"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // Function to add a post
+    document.addEventListener("DOMContentLoaded", function() {
+      document.getElementById('post-form').addEventListener('submit', async function(event) {
+        event.preventDefault();
+        const title = document.getElementById('post-title').value;
+        const category = document.getElementById('post-category').value;
+        const date = document.getElementById('post-date').value;
+        const image = document.getElementById('post-image').value;
+        const content = document.getElementById('post-content').value;
+
+        const post = {
+          title: title,
+          category: category,
+          date: date,
+          image: image,
+          content: content
+        };
+
+        try {
+          await addDoc(collection(db, "posts"), post);
+          document.getElementById('post-success').style.display = 'block';
+          document.getElementById('post-form').reset();
+          displayPosts(); // Refresh the posts list
+        } catch (error) {
+          console.error("Error adding post: ", error);
+        }
+      });
+
+      displayPosts(); // Load posts on page load
+    });
+
+    // Function to display posts
+    async function displayPosts() {
+      const postsContainer = document.getElementById('posts-container');
+      postsContainer.innerHTML = ''; // Clear existing posts
+
+      try {
+        const q = query(collection(db, "posts"), orderBy("date", "desc"));
+        const querySnapshot = await getDocs(q);
+
+        querySnapshot.forEach((doc) => {
+          const post = doc.data();
+          const postElement = document.createElement('div');
+          postElement.classList.add('post');
+          postElement.innerHTML = `
+            <h3>${post.title}</h3>
+            <p>${post.content}</p>
+            <div class="meta">
+              <span>${new Date(post.date).toLocaleDateString()}</span>
+            </div>
+            <button onclick="deletePost('${doc.id}')">Delete</button>
+          `;
+          postsContainer.appendChild(postElement);
+        });
+
+      } catch (error) {
+        console.error("Error fetching posts: ", error);
+      }
+    }
+
+    // Function to delete a post
+    async function deletePost(id) {
+      try {
+        await deleteDoc(doc(db, "posts", id));
+        displayPosts(); // Refresh the posts list
+      } catch (error) {
+        console.error("Error deleting post: ", error);
+      }
+    }
+  </script>
 </head>
 <body>
   <div class="admin-container">
@@ -29,76 +117,5 @@
       <!-- Posts will be dynamically added here -->
     </div>
   </div>
-
-  <script>
-    // Your web app's Firebase configuration
-    const firebaseConfig = {
-      apiKey: "AIzaSyAf8TQrUMp2tdXmWNxilMZJ1Qr2Cnjqqv0",
-      authDomain: "apartment-437a8.firebaseapp.com",
-      projectId: "apartment-437a8",
-      storageBucket: "apartment-437a8.appspot.com",
-      messagingSenderId: "827390303294",
-      appId: "1:827390303294:web:4545c07442c9f2b994c56f",
-      measurementId: "G-95Y50JCVF8"
-    };
-
-    // Initialize Firebase
-    const app = firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-
-    document.getElementById('post-form').addEventListener('submit', function(event) {
-      event.preventDefault();
-      const title = document.getElementById('post-title').value;
-      const category = document.getElementById('post-category').value;
-      const date = document.getElementById('post-date').value;
-      const image = document.getElementById('post-image').value;
-      const content = document.getElementById('post-content').value;
-
-      const post = {
-        title: title,
-        category: category,
-        date: date,
-        image: image,
-        content: content
-      };
-
-      db.collection('posts').add(post).then(() => {
-        document.getElementById('post-success').style.display = 'block';
-        document.getElementById('post-form').reset();
-        displayPosts(); // Refresh the posts list
-      });
-    });
-
-    function displayPosts() {
-      const postsContainer = document.getElementById('posts-container');
-      postsContainer.innerHTML = ''; // Clear existing posts
-
-      db.collection('posts').orderBy('date', 'desc').get().then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          const post = doc.data();
-          const postElement = document.createElement('div');
-          postElement.classList.add('post');
-          postElement.innerHTML = `
-            <h3>${post.title}</h3>
-            <p>${post.content}</p>
-            <div class="meta">
-              <span>${new Date(post.date).toLocaleDateString()}</span>
-            </div>
-            <button onclick="deletePost('${doc.id}')">Delete</button>
-          `;
-          postsContainer.appendChild(postElement);
-        });
-      });
-    }
-
-    function deletePost(id) {
-      db.collection('posts').doc(id).delete().then(() => {
-        displayPosts(); // Refresh the posts list
-      });
-    }
-
-    // Display posts on page load
-    document.addEventListener('DOMContentLoaded', displayPosts);
-  </script>
 </body>
 </html>
