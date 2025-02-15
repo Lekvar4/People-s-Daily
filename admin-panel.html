@@ -4,14 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Panel</title>
-  <link rel="stylesheet" href="Style.css">
+  <link rel="stylesheet" href="style.css">
+  
   <!-- Firebase SDK -->
   <script type="module">
-    // Import Firebase modules properly
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-    import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, orderBy, query, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+    // Import Firebase modules
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, orderBy, query } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-    // Your Firebase configuration
+    // Firebase configuration
     const firebaseConfig = {
       apiKey: "AIzaSyAf8TQrUMp2tdXmWNxilMZJ1Qr2Cnjqqv0",
       authDomain: "apartment-437a8.firebaseapp.com",
@@ -27,29 +28,37 @@
     const db = getFirestore(app);
 
     // Function to add a post
-    document.addEventListener("DOMContentLoaded", function() {
-      document.getElementById('post-form').addEventListener('submit', async function(event) {
+    document.addEventListener("DOMContentLoaded", function () {
+      document.getElementById("post-form").addEventListener("submit", async function (event) {
         event.preventDefault();
-        const title = document.getElementById('post-title').value;
-        const category = document.getElementById('post-category').value;
-        const image = document.getElementById('post-image').value;
-        const content = document.getElementById('post-content').value;
+
+        const title = document.getElementById("post-title").value.trim();
+        const category = document.getElementById("post-category").value.trim();
+        const date = document.getElementById("post-date").value;
+        const image = document.getElementById("post-image").value.trim();
+        const content = document.getElementById("post-content").value.trim();
+
+        if (!title || !category || !date || !image || !content) {
+          alert("Please fill in all fields.");
+          return;
+        }
 
         const post = {
-          title: title,
-          category: category,
-          date: serverTimestamp(), // Use Firestore timestamp
-          image: image,
-          content: content
+          title,
+          category,
+          date,
+          image,
+          content
         };
 
         try {
           await addDoc(collection(db, "posts"), post);
-          document.getElementById('post-success').style.display = 'block';
-          document.getElementById('post-form').reset();
+          alert("Post added successfully!");
+          document.getElementById("post-form").reset();
           displayPosts(); // Refresh the posts list
         } catch (error) {
           console.error("Error adding post: ", error);
+          alert("Error adding post. Check the console for details.");
         }
       });
 
@@ -58,8 +67,8 @@
 
     // Function to display posts
     async function displayPosts() {
-      const postsContainer = document.getElementById('posts-container');
-      postsContainer.innerHTML = ''; // Clear existing posts
+      const postsContainer = document.getElementById("posts-container");
+      postsContainer.innerHTML = ""; // Clear existing posts
 
       try {
         const q = query(collection(db, "posts"), orderBy("date", "desc"));
@@ -67,14 +76,13 @@
 
         querySnapshot.forEach((doc) => {
           const post = doc.data();
-          const postElement = document.createElement('div');
-          postElement.classList.add('post');
+          const postElement = document.createElement("div");
+          postElement.classList.add("post");
           postElement.innerHTML = `
             <h3>${post.title}</h3>
-            <img src="${post.image}" alt="Post Image" style="max-width: 100px; height: auto;">
             <p>${post.content}</p>
             <div class="meta">
-              <span>${post.date ? new Date(post.date.toDate()).toLocaleDateString() : 'No Date'}</span>
+              <span>${new Date(post.date).toLocaleDateString()}</span>
             </div>
             <button onclick="deletePost('${doc.id}')">Delete</button>
           `;
@@ -83,18 +91,21 @@
 
       } catch (error) {
         console.error("Error fetching posts: ", error);
+        alert("Error fetching posts. Check the console.");
       }
     }
 
-    // Function to delete a post (Make it globally accessible)
-    window.deletePost = async function(id) {
+    // Function to delete a post
+    async function deletePost(id) {
       try {
         await deleteDoc(doc(db, "posts", id));
+        alert("Post deleted successfully!");
         displayPosts(); // Refresh the posts list
       } catch (error) {
         console.error("Error deleting post: ", error);
+        alert("Error deleting post. Check the console.");
       }
-    };
+    }
   </script>
 </head>
 <body>
@@ -103,11 +114,11 @@
     <form id="post-form">
       <input type="text" id="post-title" placeholder="Post Title" required>
       <input type="text" id="post-category" placeholder="Category" required>
+      <input type="date" id="post-date" required>
       <input type="text" id="post-image" placeholder="Image URL" required>
       <textarea id="post-content" placeholder="Post Content" required></textarea>
       <button type="submit">Add Post</button>
     </form>
-    <div id="post-success" style="display:none; color: green;">Post added successfully</div>
   </div>
 
   <div class="admin-container">
