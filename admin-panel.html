@@ -34,13 +34,17 @@
         const category = document.getElementById('post-category').value;
         const image = document.getElementById('post-image').value;
         const content = document.getElementById('post-content').value;
+        const link = document.getElementById('post-link').value;
 
         const post = {
           title: title,
           category: category,
           date: serverTimestamp(), // Use Firestore timestamp
           image: image,
-          content: content
+          content: content,
+          link: link,
+          likes: 0,
+          dislikes: 0
         };
 
         try {
@@ -104,6 +108,7 @@
       <input type="text" id="post-title" placeholder="Post Title" required>
       <input type="text" id="post-category" placeholder="Category" required>
       <input type="text" id="post-image" placeholder="Image URL" required>
+      <input type="text" id="post-link" placeholder="Post Link" required>
       <textarea id="post-content" placeholder="Post Content" required></textarea>
       <button type="submit">Add Post</button>
     </form>
