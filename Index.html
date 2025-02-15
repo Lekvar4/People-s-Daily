@@ -17,6 +17,9 @@
     gtag('js', new Date());
     gtag('config', 'UA-XXXXX-Y');
   </script>
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
 </head>
 <body>
   <noscript>
@@ -244,45 +247,63 @@
 </main>
 
 <script>
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyAf8TQrUMp2tdXmWNxilMZJ1Qr2Cnjqqv0",
+    authDomain: "apartment-437a8.firebaseapp.com",
+    projectId: "apartment-437a8",
+    storageBucket: "apartment-437a8.appspot.com",
+    messagingSenderId: "827390303294",
+    appId: "1:827390303294:web:4545c07442c9f2b994c56f",
+    measurementId: "G-95Y50JCVF8"
+  };
+
+  // Initialize Firebase
+  const app = firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+
   document.addEventListener('DOMContentLoaded', function() {
     const postsContainer = document.getElementById('posts-container');
-    const posts = JSON.parse(localStorage.getItem('posts')) || [];
+    postsContainer.innerHTML = ''; // Clear existing posts
 
-    const categories = {};
+    db.collection('posts').orderBy('date', 'desc').get().then((querySnapshot) => {
+      const categories = {};
 
-    posts.forEach(post => {
-      if (!categories[post.category]) {
-        categories[post.category] = [];
-      }
-      categories[post.category].push(post);
-    });
-
-    for (const category in categories) {
-      const categoryElement = document.createElement('section');
-      categoryElement.classList.add('category');
-      categoryElement.innerHTML = `<h2>${category}</h2>`;
-
-      const postsElement = document.createElement('div');
-      postsElement.classList.add('posts');
-
-      categories[category].forEach(post => {
-        const postElement = document.createElement('article');
-        postElement.classList.add('post');
-        postElement.innerHTML = `
-          <img src="${post.image}" alt="${post.title}">
-          <h3>${post.title}</h3>
-          <p>${post.content}</p>
-          <div class="meta">
-            <span>By Admin</span>
-            <span>${new Date(post.date).toLocaleDateString()}</span>
-          </div>
-        `;
-        postsElement.appendChild(postElement);
+      querySnapshot.forEach((doc) => {
+        const post = doc.data();
+        if (!categories[post.category]) {
+          categories[post.category] = [];
+        }
+        categories[post.category].push(post);
       });
 
-      categoryElement.appendChild(postsElement);
-      postsContainer.appendChild(categoryElement);
-    }
+      for (const category in categories) {
+        const categoryElement = document.createElement('section');
+        categoryElement.classList.add('category');
+        categoryElement.innerHTML = `<h2>${category}</h2>`;
+
+        const postsElement = document.createElement('div');
+        postsElement.classList.add('posts');
+
+        categories[category].forEach(post => {
+          const postElement = document.createElement('article');
+          postElement.classList.add('post');
+          postElement.innerHTML = `
+            <img src="${post.image}" alt="${post.title}">
+            <h3>${post.title}</h3>
+            <p>${post.content}</p>
+            <div class="meta">
+              <span>By Admin</span>
+              <span>${new Date(post.date).toLocaleDateString()}</span>
+            </div>
+          `;
+          postsElement.appendChild(postElement);
+        });
+
+        categoryElement.appendChild(postsElement);
+        postsContainer.appendChild(categoryElement);
+      }
+    });
   });
 </script>
 
