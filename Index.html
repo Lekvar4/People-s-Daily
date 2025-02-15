@@ -240,132 +240,147 @@
 
   <script>
     // Firebase configuration
-    const firebaseConfig = {
-      apiKey: "AIzaSyAf8TQrUMp2tdXmWNxilMZJ1Qr2Cnjqqv0",
-      authDomain: "apartment-437a8.firebaseapp.com",
-      projectId: "apartment-437a8",
-      storageBucket: "apartment-437a8.appspot.com",
-      messagingSenderId: "827390303294",
-      appId: "1:827390303294:web:4545c07442c9f2b994c56f",
-      measurementId: "G-95Y50JCVF8"
-    };
+const firebaseConfig = {
+  apiKey: "AIzaSyAf8TQrUMp2tdXmWNxilMZJ1Qr2Cnjqqv0",
+  authDomain: "apartment-437a8.firebaseapp.com",
+  projectId: "apartment-437a8",
+  storageBucket: "apartment-437a8.appspot.com",
+  messagingSenderId: "827390303294",
+  appId: "1:827390303294:web:4545c07442c9f2b994c56f",
+  measurementId: "G-95Y50JCVF8"
+};
 
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
 
-    // Fetch and display posts
-    document.addEventListener('DOMContentLoaded', function() {
-      const postsContainer = document.getElementById('posts-container');
-      postsContainer.innerHTML = ''; // Clear existing posts
+// Fetch and display posts
+document.addEventListener('DOMContentLoaded', function() {
+  const postsContainer = document.getElementById('posts-container');
+  postsContainer.innerHTML = ''; // Clear existing posts
 
-      db.collection('posts').orderBy('date', 'desc').get().then((querySnapshot) => {
-        if (querySnapshot.empty) {
-          console.log("No posts found.");
-        } else {
-          querySnapshot.forEach((doc) => {
-            const post = doc.data();
-            const postId = doc.id;
-            const postElement = document.createElement('article');
-            postElement.classList.add('post');
+  db.collection('posts').orderBy('date', 'desc').get().then((querySnapshot) => {
+    if (querySnapshot.empty) {
+      console.log("No posts found.");
+    } else {
+      querySnapshot.forEach((doc) => {
+        const post = doc.data();
+        const postId = doc.id;
+        const postElement = document.createElement('article');
+        postElement.classList.add('post');
 
-            const postDate = post.date ? new Date(post.date.toDate()).toLocaleDateString() : 'No Date';
+        const postDate = post.date ? new Date(post.date.toDate()).toLocaleDateString() : 'No Date';
 
-            postElement.innerHTML = `
-              <img src="${post.image}" alt="${post.title}">
-              <h3>${post.title}</h3>
-              <p>${post.content}</p>
-              <div class="meta">
-                <span>By Admin</span>
-                <span>${postDate}</span>
-              </div>
-              <div class="post-actions">
-                <button class="like-btn" data-id="${postId}"><i class="fas fa-thumbs-up"></i> (<span class="like-count">${post.likes || 0}</span>)</button>
-                <button class="dislike-btn" data-id="${postId}"><i class="fas fa-thumbs-down"></i> (<span class="dislike-count">${post.dislikes || 0}</span>)</button>
-                <button class="share-btn" data-link="${post.link}" data-category="${post.category}"><i class="fas fa-share"></i></button>
-              </div>
-              <div class="comments-section">
-                <h4>Comments</h4>
-                <div class="comments" id="comments-${postId}">
-                  <!-- Comments will be dynamically added here -->
-                </div>
-                <form class="comment-form" data-id="${postId}">
-                  <input type="text" name="name" placeholder="Your Name (or Anonymous)">
-                  <textarea name="comment" placeholder="Your Comment" required></textarea>
-                  <button type="submit">Submit</button>
-                </form>
-              </div>
+        postElement.innerHTML = `
+          <img src="${post.image}" alt="${post.title}">
+          <h3>${post.title}</h3>
+          <p>${post.content}</p>
+          <div class="meta">
+            <span>By Admin</span>
+            <span>${postDate}</span>
+          </div>
+          <div class="post-actions">
+            <button class="like-btn" data-id="${postId}"><i class="fas fa-thumbs-up"></i> (<span class="like-count">${post.likes || 0}</span>)</button>
+            <button class="dislike-btn" data-id="${postId}"><i class="fas fa-thumbs-down"></i> (<span class="dislike-count">${post.dislikes || 0}</span>)</button>
+            <button class="share-btn" data-link="https://example.com/post/${postId}" data-category="${post.category}"><i class="fas fa-share"></i></button>
+          </div>
+          <div class="comments-section">
+            <h4>Comments</h4>
+            <div class="comments" id="comments-${postId}">
+              <!-- Comments will be dynamically added here -->
+            </div>
+            <form class="comment-form" data-id="${postId}">
+              <input type="text" name="name" placeholder="Your Name (or Anonymous)">
+              <textarea name="comment" placeholder="Your Comment" required></textarea>
+              <button type="submit">Submit</button>
+            </form>
+          </div>
+        `;
+        postsContainer.appendChild(postElement);
+
+        // Fetch and display comments
+        db.collection('posts').doc(postId).collection('comments').orderBy('date', 'desc').get().then((commentSnapshot) => {
+          const commentsContainer = document.getElementById(`comments-${postId}`);
+          commentSnapshot.forEach((commentDoc) => {
+            const comment = commentDoc.data();
+            const commentElement = document.createElement('div');
+            commentElement.classList.add('comment');
+            commentElement.innerHTML = `
+              <p><strong>${comment.name || 'Anonymous'}:</strong> ${comment.text}</p>
             `;
-            postsContainer.appendChild(postElement);
-
-            // Fetch and display comments
-            db.collection('posts').doc(postId).collection('comments').orderBy('date', 'desc').get().then((commentSnapshot) => {
-              const commentsContainer = document.getElementById(`comments-${postId}`);
-              commentSnapshot.forEach((commentDoc) => {
-                const comment = commentDoc.data();
-                const commentElement = document.createElement('div');
-                commentElement.classList.add('comment');
-                commentElement.innerHTML = `
-                  <p><strong>${comment.name || 'Anonymous'}:</strong> ${comment.text}</p>
-                `;
-                commentsContainer.appendChild(commentElement);
-              });
-            });
+            commentsContainer.appendChild(commentElement);
           });
-
-          // Add event listeners for like and dislike buttons
-          document.querySelectorAll('.like-btn').forEach(button => {
-            button.addEventListener('click', function() {
-              const postId = this.getAttribute('data-id');
-              const likeCountElement = this.querySelector('.like-count');
-              const newLikeCount = parseInt(likeCountElement.textContent) + 1;
-              likeCountElement.textContent = newLikeCount;
-
-              db.collection('posts').doc(postId).update({
-                likes: newLikeCount
-              });
-            });
-          });
-
-          document.querySelectorAll('.dislike-btn').forEach(button => {
-            button.addEventListener('click', function() {
-              const postId = this.getAttribute('data-id');
-              const dislikeCountElement = this.querySelector('.dislike-count');
-              const newDislikeCount = parseInt(dislikeCountElement.textContent) + 1;
-              dislikeCountElement.textContent = newDislikeCount;
-
-              db.collection('posts').doc(postId).update({
-                dislikes: newDislikeCount
-              });
-            });
-          });
-
-          // Add event listeners for comment forms
-          document.querySelectorAll('.comment-form').forEach(form => {
-            form.addEventListener('submit', function(event) {
-              event.preventDefault();
-              const postId = this.getAttribute('data-id');
-              const name = this.querySelector('input[name="name"]').value || 'Anonymous';
-              const commentText = this.querySelector('textarea[name="comment"]').value;
-
-              db.collection('posts').doc(postId).collection('comments').add({
-                name: name,
-                text: commentText,
-                date: firebase.firestore.FieldValue.serverTimestamp()
-              }).then(() => {
-                // Clear the form
-                this.reset();
-                // Optionally, you can refresh the comments section
-              }).catch((error) => {
-                console.error("Error adding comment:", error);
-              });
-            });
-          });
-        }
-      }).catch((error) => {
-        console.error("Error fetching posts:", error);
+        });
       });
-    });
+
+      // Add event listeners for like and dislike buttons
+      document.querySelectorAll('.like-btn').forEach(button => {
+        button.addEventListener('click', function() {
+          const postId = this.getAttribute('data-id');
+          const likeCountElement = this.querySelector('.like-count');
+          const currentLikeCount = parseInt(likeCountElement.textContent);
+          const isLiked = this.classList.toggle('liked');
+
+          const newLikeCount = isLiked ? currentLikeCount + 1 : currentLikeCount - 1;
+          likeCountElement.textContent = newLikeCount;
+
+          db.collection('posts').doc(postId).update({
+            likes: newLikeCount
+          }).then(() => {
+            console.log(`Post ${postId} ${isLiked ? 'liked' : 'unliked'}. New like count: ${newLikeCount}`);
+          }).catch((error) => {
+            console.error("Error updating likes:", error);
+          });
+        });
+      });
+
+      document.querySelectorAll('.dislike-btn').forEach(button => {
+        button.addEventListener('click', function() {
+          const postId = this.getAttribute('data-id');
+          const dislikeCountElement = this.querySelector('.dislike-count');
+          const currentDislikeCount = parseInt(dislikeCountElement.textContent);
+          const isDisliked = this.classList.toggle('disliked');
+
+          const newDislikeCount = isDisliked ? currentDislikeCount + 1 : currentDislikeCount - 1;
+          dislikeCountElement.textContent = newDislikeCount;
+
+          db.collection('posts').doc(postId).update({
+            dislikes: newDislikeCount
+          }).then(() => {
+            console.log(`Post ${postId} ${isDisliked ? 'disliked' : 'undisliked'}. New dislike count: ${newDislikeCount}`);
+          }).catch((error) => {
+            console.error("Error updating dislikes:", error);
+          });
+        });
+      });
+
+      // Add event listeners for comment forms
+      document.querySelectorAll('.comment-form').forEach(form => {
+        form.addEventListener('submit', function(event) {
+          event.preventDefault();
+          const postId = this.getAttribute('data-id');
+          const name = this.querySelector('input[name="name"]').value || 'Anonymous';
+          const commentText = this.querySelector('textarea[name="comment"]').value;
+
+          db.collection('posts').doc(postId).collection('comments').add({
+            name: name,
+            text: commentText,
+            date: firebase.firestore.FieldValue.serverTimestamp()
+          }).then(() => {
+            console.log(`Comment added to post ${postId}`);
+            // Clear the form
+            this.reset();
+            // Optionally, you can refresh the comments section
+          }).catch((error) => {
+            console.error("Error adding comment:", error);
+          });
+        });
+      });
+    }
+  }).catch((error) => {
+    console.error("Error fetching posts:", error);
+  });
+});
   </script>
 
   <!-- Submit News Section -->
@@ -440,4 +455,4 @@
   </footer>
 
 </body>
-</html>s
+</html>
