@@ -9,7 +9,7 @@
   <script type="module">
     // Import Firebase modules properly
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-    import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, orderBy, query } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, orderBy, query, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
     // Your Firebase configuration
     const firebaseConfig = {
@@ -32,14 +32,13 @@
         event.preventDefault();
         const title = document.getElementById('post-title').value;
         const category = document.getElementById('post-category').value;
-        const date = document.getElementById('post-date').value;
         const image = document.getElementById('post-image').value;
         const content = document.getElementById('post-content').value;
 
         const post = {
           title: title,
           category: category,
-          date: date,
+          date: serverTimestamp(), // Use Firestore timestamp
           image: image,
           content: content
         };
@@ -72,9 +71,10 @@
           postElement.classList.add('post');
           postElement.innerHTML = `
             <h3>${post.title}</h3>
+            <img src="${post.image}" alt="Post Image" style="max-width: 100px; height: auto;">
             <p>${post.content}</p>
             <div class="meta">
-              <span>${new Date(post.date).toLocaleDateString()}</span>
+              <span>${post.date ? new Date(post.date.toDate()).toLocaleDateString() : 'No Date'}</span>
             </div>
             <button onclick="deletePost('${doc.id}')">Delete</button>
           `;
@@ -86,15 +86,15 @@
       }
     }
 
-    // Function to delete a post
-    async function deletePost(id) {
+    // Function to delete a post (Make it globally accessible)
+    window.deletePost = async function(id) {
       try {
         await deleteDoc(doc(db, "posts", id));
         displayPosts(); // Refresh the posts list
       } catch (error) {
         console.error("Error deleting post: ", error);
       }
-    }
+    };
   </script>
 </head>
 <body>
@@ -103,7 +103,6 @@
     <form id="post-form">
       <input type="text" id="post-title" placeholder="Post Title" required>
       <input type="text" id="post-category" placeholder="Category" required>
-      <input type="date" id="post-date" required>
       <input type="text" id="post-image" placeholder="Image URL" required>
       <textarea id="post-content" placeholder="Post Content" required></textarea>
       <button type="submit">Add Post</button>
