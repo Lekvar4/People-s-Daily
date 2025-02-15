@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Panel</title>
   <link rel="stylesheet" href="Style.css">
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
 </head>
 <body>
   <div class="admin-container">
@@ -28,6 +31,21 @@
   </div>
 
   <script>
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyAf8TQrUMp2tdXmWNxilMZJ1Qr2Cnjqqv0",
+      authDomain: "apartment-437a8.firebaseapp.com",
+      projectId: "apartment-437a8",
+      storageBucket: "apartment-437a8.appspot.com",
+      messagingSenderId: "827390303294",
+      appId: "1:827390303294:web:4545c07442c9f2b994c56f",
+      measurementId: "G-95Y50JCVF8"
+    };
+
+    // Initialize Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
     document.getElementById('post-form').addEventListener('submit', function(event) {
       event.preventDefault();
       const title = document.getElementById('post-title').value;
@@ -37,7 +55,6 @@
       const content = document.getElementById('post-content').value;
 
       const post = {
-        id: Date.now(), // Unique ID for each post
         title: title,
         category: category,
         date: date,
@@ -45,40 +62,39 @@
         content: content
       };
 
-      let posts = JSON.parse(localStorage.getItem('posts')) || [];
-      posts.unshift(post); // Add new post at the top
-      localStorage.setItem('posts', JSON.stringify(posts));
-
-      document.getElementById('post-success').style.display = 'block';
-      document.getElementById('post-form').reset();
-      displayPosts(); // Refresh the posts list
+      db.collection('posts').add(post).then(() => {
+        document.getElementById('post-success').style.display = 'block';
+        document.getElementById('post-form').reset();
+        displayPosts(); // Refresh the posts list
+      });
     });
 
     function displayPosts() {
       const postsContainer = document.getElementById('posts-container');
       postsContainer.innerHTML = ''; // Clear existing posts
-      const posts = JSON.parse(localStorage.getItem('posts')) || [];
 
-      posts.forEach(post => {
-        const postElement = document.createElement('div');
-        postElement.classList.add('post');
-        postElement.innerHTML = `
-          <h3>${post.title}</h3>
-          <p>${post.content}</p>
-          <div class="meta">
-            <span>${new Date(post.date).toLocaleDateString()}</span>
-          </div>
-          <button onclick="deletePost(${post.id})">Delete</button>
-        `;
-        postsContainer.appendChild(postElement);
+      db.collection('posts').orderBy('date', 'desc').get().then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          const post = doc.data();
+          const postElement = document.createElement('div');
+          postElement.classList.add('post');
+          postElement.innerHTML = `
+            <h3>${post.title}</h3>
+            <p>${post.content}</p>
+            <div class="meta">
+              <span>${new Date(post.date).toLocaleDateString()}</span>
+            </div>
+            <button onclick="deletePost('${doc.id}')">Delete</button>
+          `;
+          postsContainer.appendChild(postElement);
+        });
       });
     }
 
     function deletePost(id) {
-      let posts = JSON.parse(localStorage.getItem('posts')) || [];
-      posts = posts.filter(post => post.id !== id);
-      localStorage.setItem('posts', JSON.stringify(posts));
-      displayPosts(); // Refresh the posts list
+      db.collection('posts').doc(id).delete().then(() => {
+        displayPosts(); // Refresh the posts list
+      });
     }
 
     // Display posts on page load
