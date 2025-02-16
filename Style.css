@@ -27,7 +27,7 @@ body {
 /* Header */
 header {
   background-color: var(--secondary-color);
-  padding: 107px 0;
+  padding: 10px 0;
 }
 
 header .logo img {
@@ -39,7 +39,7 @@ nav {
   display: flex;
   justify-content: center; /* Center the navigation options */
   align-items: center;
-  margin-bottom: -30px; /* Move the navigation closer to the hero section */
+  margin-bottom: -40px; /* Move the navigation closer to the hero section */
 }
 
 .nav-links {
