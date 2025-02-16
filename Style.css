@@ -32,17 +32,20 @@ header {
 
 header .logo img {
   height: 127px;
+  margin-top: -20px; /* Adjust this value as needed */
 }
 
 nav {
   display: flex;
-  justify-content: space-between;
+  justify-content: center; /* Center the navigation options */
   align-items: center;
+  margin-bottom: -30px; /* Move the navigation closer to the hero section */
 }
 
 .nav-links {
   list-style: none;
   display: flex;
+  flex-wrap: wrap;
   gap: 20px;
 }
 
@@ -53,6 +56,25 @@ nav {
 
 .nav-links a:hover {
   color: var(--primary-color);
+}
+
+.menu-icon {
+  display: none; /* Hide the menu toggle icon */
+}
+
+@media (max-width: 768px) {
+  .nav-links {
+    justify-content: center;
+    width: 100%;
+  }
+}
+
+.hero h1 {
+  font-size: 2em;
+}
+
+.hero p {
+  font-size: 1em;
 }
 
 /* Hero Section */
@@ -254,36 +276,6 @@ footer {
 
 .social-media a:hover {
   color: var(--primary-color);
-}
-
-/* Responsive Styles */
-@media (max-width: 768px) {
-  .nav-links {
-    flex-direction: column;
-    background-color: var(--secondary-color);
-    padding: 20px;
-    position: absolute;
-    top: 180px; /* Adjust top position to avoid covering the logo */
-    left: 0;
-    width: 50%;
-    display: none;
-  }
-
-  .menu-icon {
-    display: block;
-  }
-
-  .nav-links.active {
-    display: block;
-  }
-
-  .hero h1 {
-    font-size: 2em;
-  }
-
-  .hero p {
-    font-size: 1em;
-  }
 }
 
 /* Login and Admin Containers */
